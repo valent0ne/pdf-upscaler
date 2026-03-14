@@ -18,18 +18,21 @@ A Python script to upscale PDF files by enhancing the resolution of images withi
 ## Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/valent0ne/pdf-upscaler.git
    cd pdf-upscaler
    ```
 
 2. Create and activate a virtual environment:
+
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
 3. Install dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```
@@ -38,9 +41,11 @@ A Python script to upscale PDF files by enhancing the resolution of images withi
 
 1. Place your PDF files in the `data/` directory.
 2. Run the script:
+
    ```bash
    python upscale_pdf.py
    ```
+
 3. Find the upscaled PDFs in the `out/` directory with "upscaled_" prefix.
 
 ## How it works
