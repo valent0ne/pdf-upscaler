@@ -1,3 +1,5 @@
+import argparse
+import concurrent.futures
 import io
 import os
 
@@ -57,19 +59,32 @@ def upscale_pdf(input_path, output_path, scale_factor=2):
     new_doc.close()
 
 
-def main():
+def main(num_workers=2):
     input_dir = "data"
     output_dir = "out"
     os.makedirs(output_dir, exist_ok=True)
 
-    for filename in os.listdir(input_dir):
-        if filename.lower().endswith(".pdf"):
-            input_path = os.path.join(input_dir, filename)
-            output_path = os.path.join(output_dir, f"upscaled_{filename}")
-            print(f"Processing {filename}...")
-            upscale_pdf(input_path, output_path)
-            print(f"Saved to {output_path}")
+    pdf_files = [
+        filename
+        for filename in os.listdir(input_dir)
+        if filename.lower().endswith(".pdf")
+    ]
+
+    def process_file(filename):
+        input_path = os.path.join(input_dir, filename)
+        output_path = os.path.join(output_dir, f"upscaled_{filename}")
+        print(f"Processing {filename}...")
+        upscale_pdf(input_path, output_path)
+        print(f"Saved to {output_path}")
+
+    with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
+        executor.map(process_file, pdf_files)
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Upscale PDFs in parallel.")
+    parser.add_argument(
+        "--workers", type=int, default=2, help="Number of parallel workers (default: 2)"
+    )
+    args = parser.parse_args()
+    main(num_workers=args.workers)

@@ -9,6 +9,7 @@ A Python script to upscale PDF files by enhancing the resolution of images withi
 - Applies sharpening for enhanced clarity
 - Optimizes output size with JPEG compression and PDF deflate
 - Processes all PDFs in `data/` directory automatically
+- Supports parallel processing for faster batch conversion
 
 ## Requirements
 
@@ -44,6 +45,12 @@ A Python script to upscale PDF files by enhancing the resolution of images withi
 
    ```bash
    python upscale_pdf.py
+   ```
+
+   For parallel processing (default 2 workers):
+
+   ```bash
+   python upscale_pdf.py --workers 4
    ```
 
 3. Find the upscaled PDFs in the `out/` directory with "upscaled_" prefix.
