@@ -59,6 +59,15 @@ def upscale_pdf(input_path, output_path, scale_factor=2):
     new_doc.close()
 
 
+def process_file(args):
+    filename, input_dir, output_dir = args
+    input_path = os.path.join(input_dir, filename)
+    output_path = os.path.join(output_dir, f"upscaled_{filename}")
+    print(f"Processing {filename}...")
+    upscale_pdf(input_path, output_path)
+    print(f"Saved to {output_path}")
+
+
 def main(num_workers=2):
     input_dir = "data"
     output_dir = "out"
@@ -70,15 +79,10 @@ def main(num_workers=2):
         if filename.lower().endswith(".pdf")
     ]
 
-    def process_file(filename):
-        input_path = os.path.join(input_dir, filename)
-        output_path = os.path.join(output_dir, f"upscaled_{filename}")
-        print(f"Processing {filename}...")
-        upscale_pdf(input_path, output_path)
-        print(f"Saved to {output_path}")
+    tasks = [(filename, input_dir, output_dir) for filename in pdf_files]
 
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
-        executor.map(process_file, pdf_files)
+        list(executor.map(process_file, tasks))
 
 
 if __name__ == "__main__":
